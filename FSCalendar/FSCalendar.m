@@ -147,7 +147,9 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 {   
     _appearance = [[FSCalendarAppearance alloc] init];
     _appearance.calendar = self;
-    
+    if (_weekInfo == NULL) {
+    _weekInfo = YES;
+  }
     _gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     _formatter = [[NSDateFormatter alloc] init];
     _formatter.dateFormat = @"yyyy-MM-dd";
@@ -925,18 +927,22 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
 - (CGFloat)preferredRowHeight
 {
-    if (_preferredRowHeight == FSCalendarAutomaticDimension) {
-        CGFloat headerHeight = self.preferredHeaderHeight;
-        CGFloat weekdayHeight = self.preferredWeekdayHeight;
-        CGFloat contentHeight = self.transitionCoordinator.cachedMonthSize.height-headerHeight-weekdayHeight;
-        CGFloat padding = 5;
-        if (!self.floatingMode) {
-            _preferredRowHeight = (contentHeight-padding*2)/6.0;
-        } else {
-            _preferredRowHeight = _rowHeight;
-        }
+  if (_preferredRowHeight == FSCalendarAutomaticDimension) {
+    CGFloat headerHeight = self.preferredHeaderHeight;
+    CGFloat weekdayHeight = self.preferredWeekdayHeight;
+    CGFloat contentHeight = self.transitionCoordinator.cachedMonthSize.height-headerHeight-weekdayHeight;
+    CGFloat padding = 5;
+    if (!self.floatingMode) {
+      if (_scope == FSCalendarScopeWeek || _weekInfo) {
+        _preferredRowHeight = (contentHeight-padding*2);
+      } else {
+        _preferredRowHeight = (contentHeight-padding*2)/6.0;
+      }
+    } else {
+      _preferredRowHeight = _rowHeight;
     }
-    return _preferredRowHeight;
+  }
+  return _preferredRowHeight;
 }
 
 - (BOOL)floatingMode
