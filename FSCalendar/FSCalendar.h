@@ -366,7 +366,7 @@ IB_DESIGNABLE
  A Boolean value that determines whether the bounding rect changes when the displayed month of the calendar is changed.
  */
 @property (assign, nonatomic) IBInspectable BOOL adjustsBoundingRectWhenChangingMonths;
-
+@property (assign, nonatomic) IBInspectable BOOL weekInfo;
 /**
  A Boolean value that determines whether paging is enabled for the calendar.
  */
